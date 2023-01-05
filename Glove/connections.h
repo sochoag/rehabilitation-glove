@@ -4,6 +4,8 @@
 #include <WiFi.h>
 #include <PubSubClient.h>
 
+const char* ssid = "FAMILIA  OCHOA ";
+const char* password = "0301072468";
 const char* mqtt_server = "sochoag.ga";
 const char* mqtt_username = "glove-esp32";
 const char* mqtt_password = "10101011";
