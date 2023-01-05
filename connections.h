@@ -4,9 +4,9 @@
 #include <WiFi.h>
 #include <PubSubClient.h>
 
-const char* ssid = "APECS";
-const char* password = "apecs*123";
 const char* mqtt_server = "sochoag.ga";
+const char* mqtt_username = "glove-esp32";
+const char* mqtt_password = "10101011";
 
 //Clientes
 WiFiClient esp32Client;
@@ -59,7 +59,7 @@ void reconnect() {
     Serial.print("Attempting MQTT connection...");
     String clientId = "Glove-";
     clientId += String(random(0xffff), HEX);
-    if (client.connect(clientId.c_str())) {
+    if (client.connect(clientId.c_str(), mqtt_username, mqtt_password)) {
       Serial.println("connected");
       client.publish("glove/finger/1", "Hola desde ESP32");
       client.subscribe("glove/fingers/acts");
