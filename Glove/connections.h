@@ -59,7 +59,7 @@ void initMQTT() {
 void reconnect() {
   while (!client.connected()) {
     Serial.print("Attempting MQTT connection...");
-    String clientId = "Glove-";
+    String clientId = "glove-esp32-";
     clientId += String(random(0xffff), HEX);
     if (client.connect(clientId.c_str(), mqtt_username, mqtt_password)) {
       Serial.println("connected");

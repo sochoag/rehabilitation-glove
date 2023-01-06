@@ -1,51 +1,59 @@
-const options = {
-  // Authentication
-  username: "glove-webapp",
-  password: "10101011",
+let btnConectar = document.getElementById("btnConectar");
+btnConectar.addEventListener("click", connectMQTT);
 
+const options = {
   connectTimeout: 4000,
-  clientId: "browser_client_" + Math.random(),
+  clientId:
+    "glove-webapp-" +
+    Math.floor(Math.random() * 0xffff)
+      .toString(16)
+      .toUpperCase(),
   keepalive: 60,
   clean: true,
 };
 
 // Connection
 const WebSocket_URL = "ws://sochoag.ga:8083/mqtt";
-const client = mqtt.connect(WebSocket_URL, options);
 
-client.on("connect", () => {
-  console.log("Connect success");
-  console.log("Yes!!!");
+function connectMQTT() {
+  let username = document.getElementById("username");
+  let password = document.getElementById("password");
+  options.username = username.value;
+  options.password = password.value;
+  const client = mqtt.connect(WebSocket_URL, options);
+  client.on("connect", () => {
+    client.subscribe("glove/fingers/sens", function (err) {
+      if (!err) {
+        alert("Conexión MQTT exitosa 😎");
+        username.disabled = true;
+        password.disabled = true;
+        btnConectar.disabled = true;
+      }
+    });
+  });
 
-  client.subscribe("glove/fingers/sens", function (err) {
-    if (!err) {
-      console.log("SUBSCRIBE - SUCCESS");
+  client.on("error", (error) => {
+    alert("Error al conectar MQTT 😥");
+    password.value = "";
+    client.end();
+    return;
+  });
+
+  client.on("reconnect", (error) => {
+    console.log("reconnecting:", error);
+  });
+
+  client.on("message", function (topic, message) {
+    if (topic == "glove/fingers/sens") {
+      const received = JSON.parse(message.toString());
+      for (let llave of Object.keys(received)) {
+        dedo(llave, received[llave]);
+      }
     } else {
-      console.log("SUBSCRIBE - ERROR");
+      console.log("No se reconoce acciones para el topico:" + topic);
     }
   });
-});
-
-client.on("reconnect", (error) => {
-  console.log("reconnecting:", error);
-});
-
-client.on("error", (error) => {
-  console.log("Connect Error:", error);
-});
-
-client.on("message", function (topic, message) {
-  console.log(
-    "The topic is " + topic + " and the message is " + message.toString()
-  );
-
-  //string to object
-  const received = JSON.parse(message.toString());
-  console.log(received);
-  for (let llave of Object.keys(received)) {
-    dedo(llave, received[llave]);
-  }
-});
+}
 
 function dedo(dedo, val) {
   let pValor = document.getElementById(dedo + "-value");
@@ -80,7 +88,7 @@ function dedo(dedo, val) {
     color = getComputedStyle(document.documentElement).getPropertyValue(
       "--gray"
     );
-    pIntensity.innerHTML = "Not detected";
+    pIntensity.innerHTML = "No detected";
   }
 
   pValor.innerHTML = val;

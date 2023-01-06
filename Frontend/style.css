@@ -9,6 +9,9 @@
   --low: #b54343;
   --medium: #a3b543;
   --done: #cfff3c;
+  --sm: 12px;
+  --md: 25px;
+  --lg: 32px;
 }
 
 body {
@@ -16,15 +19,26 @@ body {
   letter-spacing: 2px;
   background-color: var(--backgroud);
   margin: 0;
+  display: block;
 }
+
+.page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .main-container {
   margin: 25px 0;
   display: flex;
   justify-content: space-evenly;
+  width: 100%;
 }
 .container {
-  height: 10em;
-  width: 12em;
+  height: 160px;
+  width: 200px;
   text-align: center;
   background: #333333;
   /* box-shadow: 0px 0px 20px var(--primary); */
@@ -48,13 +62,58 @@ body {
 
 .container p:nth-child(2) {
   color: var(--primary);
-  font-size: 30px;
+  font-size: var(--lg);
 }
 
 .container p:last-child {
   color: var(--gray);
 }
 
-.container p:last-child:hover {
-  color: var(--blue);
+.container_auth {
+  height: 250px;
+  margin-bottom: 25px;
+}
+
+.container_auth p {
+  margin-top: 20px;
+}
+
+div.auth {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  box-sizing: border-box;
+  height: 100%;
+}
+
+div.auth div {
+  display: flex;
+  flex-direction: column;
+}
+
+div.auth div label {
+  color: var(--primary);
+  font-size: var(--sm);
+}
+
+div.auth div input {
+  margin-top: 5px;
+  border-radius: 5px;
+  border: none;
+  width: 120px;
+  height: 20px;
+  font-family: "Righteous";
+  text-align: center;
+}
+
+div.auth button {
+  width: 120px;
+  border: none;
+  border-radius: 5px;
+  height: 30px;
+  cursor: pointer;
+  background-color: var(--primary);
+  font-family: "Righteous", cursive;
+  font-size: var(--sm);
 }
