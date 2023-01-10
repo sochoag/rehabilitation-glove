@@ -13,7 +13,7 @@ const options = {
 };
 
 // Connection
-const WebSocket_URL = "ws://sochoag.ga:8083/mqtt";
+const WebSocket_URL = "ws://sochoag.com:8083/mqtt";
 
 function connectMQTT() {
   let username = document.getElementById("username");
