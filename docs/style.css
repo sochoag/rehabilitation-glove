@@ -14,12 +14,133 @@
   --lg: 32px;
 }
 
+* {
+  padding: 0;
+  margin: 0;
+  color: var(--text);
+  box-sizing: content-box;
+}
+
 body {
   font-family: "Righteous", cursive;
   letter-spacing: 2px;
   background-color: var(--backgroud);
-  margin: 0;
-  display: block;
+  height: 100vh;
+  display: grid;
+  grid-template-columns: 2fr 7fr;
+  grid-template-rows: 1fr 8fr 1fr;
+}
+
+header {
+  grid-column: 1 / span 2;
+  text-align: center;
+  align-self: center;
+}
+
+aside {
+  grid-column: 1 / 2;
+}
+
+aside h2 {
+  text-align: center;
+}
+
+aside > div {
+  width: 80%;
+  height: 40%;
+  margin: 10px auto;
+}
+
+.config {
+  margin-bottom: 40px;
+}
+
+.config__form {
+  width: 90%;
+  height: 90%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.config__form--input {
+  display: flex;
+  flex-direction: column;
+}
+
+.config__form input {
+  margin-top: 5px;
+  border-radius: 5px;
+  border: none;
+  width: 120px;
+  height: 20px;
+  font-family: "Righteous";
+  text-align: center;
+  color: var(--backgroud);
+}
+
+.config__form button {
+  width: 120px;
+  border: none;
+  border-radius: 5px;
+  height: 30px;
+  cursor: pointer;
+  background-color: var(--primary);
+  font-family: "Righteous", cursive;
+  font-size: var(--sm);
+}
+
+button.config__form--disconnect {
+  background-color: var(--low);
+}
+
+.freq__form label .val {
+  font-size: 30px;
+}
+
+.freq__form label span {
+  font-size: small;
+}
+
+button:disabled,
+input:disabled {
+  filter: brightness(0.75) blur(1px);
+  cursor: not-allowed;
+}
+
+main {
+  grid-column: 2 / 4;
+}
+
+article h2 {
+  margin: 30px 40px;
+}
+
+.sensors__container {
+  display: flex;
+  justify-content: space-around;
+}
+
+.sensors__container div {
+  width: 200px;
+  height: 200px;
+}
+
+article.flexSensor .sensors__container {
+  justify-content: flex-start;
+}
+
+article.flexSensor .container {
+  margin-left: 33px;
+  width: 40%;
+}
+
+footer {
+  grid-column: 1 / span 2;
+  text-align: center;
+  align-self: center;
 }
 
 .page {
@@ -37,8 +158,6 @@ body {
   width: 100%;
 }
 .container {
-  height: 160px;
-  width: 200px;
   text-align: center;
   background: #333333;
   /* box-shadow: 0px 0px 20px var(--primary); */
@@ -54,6 +173,7 @@ body {
   margin: 0;
   color: var(--text);
   font-weight: lighter;
+  font-size: 20px;
 }
 
 .container p:nth-child(1) {
@@ -67,53 +187,4 @@ body {
 
 .container p:last-child {
   color: var(--gray);
-}
-
-.container_auth {
-  height: 250px;
-  margin-bottom: 25px;
-}
-
-.container_auth p {
-  margin-top: 20px;
-}
-
-div.auth {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  align-items: center;
-  box-sizing: border-box;
-  height: 100%;
-}
-
-div.auth div {
-  display: flex;
-  flex-direction: column;
-}
-
-div.auth div label {
-  color: var(--primary);
-  font-size: var(--sm);
-}
-
-div.auth div input {
-  margin-top: 5px;
-  border-radius: 5px;
-  border: none;
-  width: 120px;
-  height: 20px;
-  font-family: "Righteous";
-  text-align: center;
-}
-
-div.auth button {
-  width: 120px;
-  border: none;
-  border-radius: 5px;
-  height: 30px;
-  cursor: pointer;
-  background-color: var(--primary);
-  font-family: "Righteous", cursive;
-  font-size: var(--sm);
 }

@@ -1,5 +1,12 @@
 let btnConectar = document.getElementById("btnConectar");
+let btnDesconectar = document.getElementById("btnDesconectar");
+let sliderFreq = document.getElementById("frecSlider");
+let btnFreq = document.getElementById("btnFreq");
+
 btnConectar.addEventListener("click", connectMQTT);
+btnDesconectar.addEventListener("click", disconnectMQTT);
+sliderFreq.addEventListener("input", updateFreq);
+btnFreq.addEventListener("click", freqPublish);
 
 const options = {
   connectTimeout: 4000,
@@ -12,15 +19,17 @@ const options = {
   clean: true,
 };
 
+let client;
 // Connection
-const WebSocket_URL = "wss://sochoag.com:8084/mqtt";
+const WebSocket_URL = "ws://sochoag.com:8083/mqtt";
+let freqVal = 3000;
 
 function connectMQTT() {
   let username = document.getElementById("username");
   let password = document.getElementById("password");
   options.username = username.value;
   options.password = password.value;
-  const client = mqtt.connect(WebSocket_URL, options);
+  client = mqtt.connect(WebSocket_URL, options);
   client.on("connect", () => {
     client.subscribe("glove/fingers/sens", function (err) {
       if (!err) {
@@ -28,6 +37,10 @@ function connectMQTT() {
         username.disabled = true;
         password.disabled = true;
         btnConectar.disabled = true;
+
+        btnDesconectar.disabled = false;
+        btnFreq.disabled = false;
+        sliderFreq.disabled = false;
       }
     });
   });
@@ -53,6 +66,17 @@ function connectMQTT() {
       console.log("No se reconoce acciones para el topico:" + topic);
     }
   });
+}
+
+function disconnectMQTT() {
+  client.end();
+  username.disabled = false;
+  password.disabled = false;
+  btnConectar.disabled = false;
+
+  btnDesconectar.disabled = true;
+  btnFreq.disabled = true;
+  sliderFreq.disabled = true;
 }
 
 function dedo(dedo, val) {
@@ -93,4 +117,16 @@ function dedo(dedo, val) {
 
   pValor.innerHTML = val;
   pIntensity.style.color = color;
+}
+
+function updateFreq() {
+  console.log(sliderFreq.value);
+  document.getElementById("freqVal").innerText = sliderFreq.value;
+  freqVal = sliderFreq.value;
+}
+
+function freqPublish() {
+  console.log("Changing Frequency to: " + freqVal);
+  client.publish("glove/fingers/acts", freqVal, { retain: true });
+  alert("Frecuencia cambiada correctamente ✔");
 }
