@@ -21,7 +21,7 @@ const options = {
 
 let client;
 // Connection
-const WebSocket_URL = "ws://sochoag.com:8083/mqtt";
+const WebSocket_URL = "wss://sochoag.com:8084/mqtt";
 let freqVal = 3000;
 
 function connectMQTT() {
