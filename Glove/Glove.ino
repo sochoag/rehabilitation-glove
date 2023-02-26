@@ -1,6 +1,7 @@
 #include "variables.h"
 #include "fingers.h"
 #include "connections.h"
+#include "touch.h"
 
 void setup() 
 {
@@ -10,6 +11,8 @@ void setup()
   initWifi();
   initMQTT();
   initFingers();
+  initTouch();
+  Serial.println("ESP32 Touch Test");
 }
 
 void loop() 
@@ -20,4 +23,5 @@ void loop()
     publishMQTT("glove/fingers/sens", fingersReading());
   }
   loopMQTT();
+  touchFlagFunc();
 }
