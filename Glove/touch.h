@@ -1,8 +1,6 @@
 #ifndef touch_h
 #define touch_h
 
-#include "pins.h"
-
 void reportTouch(){
   static unsigned long touchLastTime = 0;
   if(millis() - touchLastTime > 1500)
