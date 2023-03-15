@@ -4,15 +4,15 @@
 #include <WiFi.h>
 #include <PubSubClient.h>
 
-const char *ssid = "manorobotica";
-const char *password = "manorobotica";
+const char *ssid = "sochoagu";
+const char *password = "sochoagu";
 const char *mqtt_server = "sochoag.com";
 const char *mqtt_username = "glove-esp32";
 const char *mqtt_password = "10101011";
 
 // Clientes
-WiFiClient esp32Client;
-PubSubClient client(esp32Client);
+WiFiClient wifiClient;
+PubSubClient mqttClient(wifiClient);
 
 void initWifi()
 {
@@ -53,45 +53,56 @@ void callback(char *topic, byte *payload, unsigned int length)
 
 void initMQTT()
 {
-  client.setServer(mqtt_server, 1883);
-  client.setCallback(callback);
+  mqttClient.setServer(mqtt_server, 1883);
+  mqttClient.setCallback(callback);
 }
 
 void reconnect()
 {
-  while (!client.connected())
+  while (!mqttClient.connected())
   {
     Serial.print("Attempting MQTT connection...");
     String clientId = "glove-esp32-";
     clientId += String(random(0xffff), HEX);
-    if (client.connect(clientId.c_str(), mqtt_username, mqtt_password))
+    if (mqttClient.connect(clientId.c_str(), mqtt_username, mqtt_password))
     {
       Serial.println("connected");
-      client.publish("glove/finger/1", "Hola desde ESP32");
-      client.subscribe("glove/fingers/acts");
+      mqttClient.subscribe("glove/acts");
     }
     else
     {
       Serial.print("failed, rc=");
-      Serial.print(client.state());
+      Serial.print(mqttClient.state());
       Serial.println(" try again in 5 seconds");
       delay(5000);
     }
   }
 }
 
+void connect(){
+  initWifi();
+  initMQTT();
+}
+
+void disconnect(){
+  mqttClient.disconnect();
+  WiFi.disconnect();
+}
+
+
+
 void loopMQTT()
 {
-  if (!client.connected())
+  if (!mqttClient.connected())
   {
     reconnect();
   }
-  client.loop();
+  mqttClient.loop();
 }
 
 void publishMQTT(String topic, String message)
 {
-  client.publish(topic.c_str(), message.c_str());
-  Serial.println("Pubicado con exito");
+  mqttClient.publish(topic.c_str(), message.c_str());
+  Serial.println("Publicado con exito: " + message);
 }
 #endif
