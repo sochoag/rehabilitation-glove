@@ -61,7 +61,7 @@ void reconnect()
     if (mqttClient.connect(clientId.c_str(), mqtt_username, mqtt_password))
     {
       Serial.println("connected");
-      mqttClient.subscribe("glove/acts");
+      mqttClient.subscribe("glove/fingers/acts");
     }
     else
     {
