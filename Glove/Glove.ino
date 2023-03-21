@@ -1,5 +1,7 @@
 #include "variables.h"
+#include "secrets.h"
 #include "pins.h"
+#include "utils.h"
 #include "connections.h"
 #include "fingers.h"
 #include "phalanges.h"
@@ -10,8 +12,9 @@ void setup()
   delay(500);
   Serial.println("Setup");
   connect();
-  initFlex();
-  initPhalanges();
+  initUtils();
+  // initFlex();
+  // initPhalanges();
 }
 
 void loop() 

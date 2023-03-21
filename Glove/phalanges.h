@@ -1,18 +1,11 @@
 #ifndef PHALANGES_H
 #define PHALANGES_H
 
-void initPhalanges() {
-  for (byte i = 0; i < phalangeSize; i++) {
-    pinMode(phalangePins[i], INPUT);
-    Serial.println("Pin " + String(phalangePins[i]) + " como entrada analogica");
-  }
-}
-
 String phalangesReading() {
   String phalangesRead[phalangeSize];
   char buffer[70];
   for (byte i = 0; i < phalangeSize; i++) {
-    int lecture = analogRead(phalangePins[i]);
+    int lecture = analogReadExpanded(phalangePins[i]);
     String value = "";
     switch (lecture) {
       case 0 ... 1600:
