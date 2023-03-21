@@ -8,20 +8,9 @@ btnDesconectar.addEventListener("click", disconnectMQTT);
 sliderFreq.addEventListener("input", updateFreq);
 btnFreq.addEventListener("click", freqPublish);
 
-const options = {
-  connectTimeout: 4000,
-  clientId:
-    "glove-webapp-" +
-    Math.floor(Math.random() * 0xffff)
-      .toString(16)
-      .toUpperCase(),
-  keepalive: 60,
-  clean: true,
-};
-
 let client;
 // Connection
-const WebSocket_URL = "wss://sochoag.com:8084/mqtt";
+
 let freqVal = 3000;
 
 function connectMQTT() {
@@ -31,18 +20,17 @@ function connectMQTT() {
   options.password = password.value;
   client = mqtt.connect(WebSocket_URL, options);
   client.on("connect", () => {
-    client.subscribe("glove/fingers/sens", function (err) {
-      if (!err) {
-        alert("Conexión MQTT exitosa 😎");
-        username.disabled = true;
-        password.disabled = true;
-        btnConectar.disabled = true;
-
-        btnDesconectar.disabled = false;
-        btnFreq.disabled = false;
-        sliderFreq.disabled = false;
-      }
+    topics.forEach((topic) => {
+      client.subscribe(topic);
     });
+    alert("Conexión MQTT exitosa 😎");
+    username.disabled = true;
+    password.disabled = true;
+    btnConectar.disabled = true;
+
+    btnDesconectar.disabled = false;
+    btnFreq.disabled = false;
+    sliderFreq.disabled = false;
   });
 
   client.on("error", (error) => {
@@ -57,10 +45,14 @@ function connectMQTT() {
   });
 
   client.on("message", function (topic, message) {
-    if (topic == "glove/fingers/sens") {
-      const received = JSON.parse(message.toString());
+    const received = JSON.parse(message.toString());
+    if (topic == "glove/fingers/flex") {
       for (let llave of Object.keys(received)) {
         dedo(llave, received[llave]);
+      }
+    } else if (topic == "glove/fingers/touch") {
+      for (let llave of Object.keys(received)) {
+        touch(llave, received[llave]);
       }
     } else {
       console.log("No se reconoce acciones para el topico:" + topic);
@@ -81,42 +73,38 @@ function disconnectMQTT() {
 
 function dedo(dedo, val) {
   let pValor = document.getElementById(dedo + "-value");
-  let pIntensity = document.getElementById(dedo + "-intensity");
-  let color = "";
-
-  if (val < 25) {
-    color = getComputedStyle(document.documentElement).getPropertyValue(
-      "--low"
-    );
-    pIntensity.innerHTML = "Low";
-  } else if (val < 50) {
-    color = getComputedStyle(document.documentElement).getPropertyValue(
-      "--medium"
-    );
-    pIntensity.innerHTML = "Medium";
-  } else {
-    color = getComputedStyle(document.documentElement).getPropertyValue(
-      "--primary"
-    );
-    pIntensity.innerHTML = "High";
-  }
-
-  if (val == 100) {
-    color = getComputedStyle(document.documentElement).getPropertyValue(
-      "--done"
-    );
-    pIntensity.innerHTML = "Nice 😎";
-  }
-
-  if (val == 0) {
-    color = getComputedStyle(document.documentElement).getPropertyValue(
-      "--gray"
-    );
-    pIntensity.innerHTML = "No detected";
-  }
-
   pValor.innerHTML = val;
-  pIntensity.style.color = color;
+  changeClass(pValor, val);
+}
+
+function touch(dedo, val) {
+  let pTouch = document.getElementById(dedo + "-touch");
+  changeClass(pTouch, val);
+  pTouch.innerHTML = val;
+}
+
+function changeClass(el, val) {
+  if (val == 0 || val == "") {
+    el.classList.add("gray");
+    el.classList.remove("low");
+    el.classList.remove("medium");
+    el.classList.remove("high");
+  } else if (val < 25 || val == "Proximal") {
+    el.classList.remove("gray");
+    el.classList.add("low");
+    el.classList.remove("medium");
+    el.classList.remove("high");
+  } else if (val < 50 || val == "Medial") {
+    el.classList.remove("gray");
+    el.classList.remove("low");
+    el.classList.add("medium");
+    el.classList.remove("high");
+  } else {
+    el.classList.remove("gray");
+    el.classList.remove("low");
+    el.classList.remove("medium");
+    el.classList.add("high");
+  }
 }
 
 function updateFreq() {
