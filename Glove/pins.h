@@ -7,6 +7,7 @@
   const byte phalangeSize = sizeof(phalangePins);
 
   const byte selectorsPins[]={26,25,33,32};
+
   const byte selectorsSize =  sizeof(selectorsPins);
 
   const byte analogPin = 36;
