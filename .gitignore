@@ -1,3 +1,4 @@
 *.cfg
 *.svd
+secrets.*
 debug_custom.json
