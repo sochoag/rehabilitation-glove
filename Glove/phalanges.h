@@ -23,7 +23,7 @@ String phalangesReading() {
     }
     phalangesRead[i] = value;
   }
-  snprintf(buffer, sizeof(buffer), "{\"r1\":\"%s\",\"r2\":\"%s\",\"r3\":\"%s\",\"r4\":\"%s\"}", phalangesRead[0], phalangesRead[1], phalangesRead[2], phalangesRead[3]);
+  snprintf(buffer, sizeof(buffer), "{\"f1\":\"%s\",\"f2\":\"%s\",\"f3\":\"%s\",\"f4\":\"%s\"}", phalangesRead[0], phalangesRead[1], phalangesRead[2], phalangesRead[3]);
   return buffer;
 }
 
