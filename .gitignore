@@ -2,3 +2,6 @@
 *.svd
 secrets.h
 debug_custom.json
+
+build/
+build/*
